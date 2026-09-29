@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
 let now=0,nextId=0;const intervals=new Map(),timeouts=new Map(),elements=new Map(),storage=new Map();
-function element(id){if(!elements.has(id))elements.set(id,{id,value:'10',hidden:false,textContent:'',innerHTML:'',style:{},dataset:{},classList:{toggle(){},add(){},remove(){}},setAttribute(){},addEventListener(){},focus(){},scrollIntoView(){}});return elements.get(id);}
+function element(id){if(!elements.has(id))elements.set(id,{id,value:'10',hidden:false,textContent:'',innerHTML:'',style:{},dataset:{},classList:{names:new Set(),toggle(n,v){if(v===undefined)v=!this.names.has(n);if(v)this.names.add(n);else this.names.delete(n);},add(...ns){ns.forEach(n=>this.names.add(n));},remove(...ns){ns.forEach(n=>this.names.delete(n));}},setAttribute(){},addEventListener(){},focus(){},scrollIntoView(){}});return elements.get(id);}
 const html=fs.readFileSync('mega_draft_coach.html','utf8');
 const ids=new Set([...html.matchAll(/id="([^"]+)"/g)].map(m=>m[1]));
 const context=vm.createContext({console,performance:{now:()=>now},document:{getElementById:id=>{assert.ok(ids.has(id),'DOM id '+id);return element(id);},querySelectorAll:()=>[],addEventListener(){},activeElement:null},window:{scrollTo(){}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},confirm:()=>true,setTimeout:f=>{const id=++nextId;timeouts.set(id,f);return id;},clearTimeout:id=>timeouts.delete(id),setInterval:f=>{const id=++nextId;intervals.set(id,f);return id;},clearInterval:id=>intervals.delete(id)});
@@ -83,6 +83,25 @@ async function testImagePreparation(){
  run('pick(state.selection)');assert.equal(run('state.player.length'),1);assert.equal(run('state.selection'),null);
  run('switchBoard()');assert.equal(run('compactBoard()'),false);run('switchBoard()');assert.equal(run('compactBoard()'),true);
  context.window.innerHeight=400;run('applyBoardLayout()');assert.equal(run('compactBoard()'),false,'Tiny viewport must fall back to readable detail layout');
- run('goHome()');console.log('PASS: 100 generated contexts, four distinct guided topics, 6x6 preview/confirm without resetting timer, responsive fallback.');
+ context.window.innerHeight=740;run('start("flash")');assert.equal(element('body').classList.names.has('quick-fit'),true);assert.equal(element('selectionBar').hidden,true);run('pick(state.pool[0].name)');assert.equal(element('body').classList.names.has('board-fit'),false,'Reflection must leave fixed board');run('goHome()');assert.equal(element('body').classList.names.has('quick-fit'),false);console.log('PASS: 100 generated contexts, four distinct guided topics, 6x6 preview/confirm without resetting timer, responsive fallback.');
 }
+for(const stage of ['opening','closing']){
+ context.testStage=stage;
+ for(let n=0;n<5;n++){
+  const batch=run('focusedPractice(testStage)');assert.equal(batch.length,8);
+  assert.equal(new Set(batch.map(q=>JSON.stringify(q))).size,8);
+  for(const q of batch){assert.ok(stage==='opening'?q.me.length<=2&&q.me.length>=1:q.me.length>=6&&q.me.length<=7);context.focusSample=q;assert.ok(run('cleanSnapshot(focusSample)'));assert.equal(run('cleanSnapshot(focusSample).analyses.length'),4);}
+ }
+}
+run('start("flash",focusedPractice("closing"));pick(state.pool[0].name);reveal("sure")');
+assert.ok(element('feedback').innerHTML.includes('Comparar as opções'));
+assert.equal(run('comparisonRows(state.log[0]).some(r=>r.c.name===state.log[0].card)'),true);
+assert.equal(run('comparisonRows(state.log[0]).find(r=>r.c.name===state.log[0].card).reason'),run('state.current.analyses[state.current.options.indexOf(state.log[0].card)].reason'));
+assert.equal(run('deckAudit(cards(["Cavaleiro"]),cards(["Balão"])).threats[0].c.name'),'Balão');
+assert.equal(run('deckAudit(cards(["Cavaleiro"]),[]).gaps.length'),3);
+assert.equal(run('cleanSnapshot({...DRILLS[0],analyses:[{}]})'),null);
+element('cardSearch').value='defesa aerea';run('renderLibrary()');assert.ok(element('cardLibrary').innerHTML.includes('Mosqueteira'));
+element('cardSearch').value='<script>';run('renderLibrary()');assert.ok(element('cardLibrary').innerHTML.includes('Nenhuma carta'));
+run('goHome()');
+console.log('PASS: 80 focused contexts, original-pool explanations, comparison includes selection, deck audit, safe accent-insensitive library search.');
 testImagePreparation().catch(e=>{console.error(e);process.exitCode=1;});

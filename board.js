@@ -7,12 +7,14 @@ function compactBoard(){
 }
 function applyBoardLayout(){
  if(!state)return;
- const compact=compactBoard();document.body.classList.toggle('board-fit',compact);
+ const compact=compactBoard();
+ const quickFit=!!(state.active&&!state.pending&&!state.finished&&$('feedback').hidden&&state.all.length===4&&boardView==='fit'&&(window.innerWidth||1200)<=600&&(window.visualViewport?.height||window.innerHeight||0)>=640);
+ document.body.classList.toggle('board-fit',compact||quickFit);document.body.classList.toggle('quick-fit',quickFit);
  if(compact)state.filter='all';
  const width=window.visualViewport?.width||window.innerWidth||1200,height=window.visualViewport?.height||window.innerHeight||800;
- $('viewBtn').hidden=state.all.length<=4||state.finished||width>900||!boardFits(width,height);
- $('viewBtn').textContent=compact?'Ampliar cartas':'Visão geral';
- $('viewBtn').setAttribute('aria-pressed',String(compact));
+ $('viewBtn').hidden=state.finished||width>900||!boardFits(width,height)||(state.all.length===4&&(width>600||height<640));
+ $('viewBtn').textContent=compact||quickFit?'Ampliar cartas':'Visão geral';
+ $('viewBtn').setAttribute('aria-pressed',String(compact||quickFit));
  $('selectionBar').hidden=!compact;
  const selected=state.pool.find(c=>c.name===state.selection);
  $('selectionName').textContent=selected?`${selected.name} · ${selected.e} elixir`:state.active?'Toque na carta para ver o nome':'Observe as escolhas do rival';

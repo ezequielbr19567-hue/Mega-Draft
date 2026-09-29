@@ -15,6 +15,7 @@ function cleanSnapshot(q){
  if(new Set([...out.me,...out.opp,...out.options]).size!==out.me.length+out.opp.length+out.options.length)return null;
  if(q.values!==undefined){if(!Array.isArray(q.values)||q.values.length!==q.options.length||q.values.some(n=>!Number.isFinite(n)||n<0||n>100)||typeof q.why!=='string'||q.why.length>1500)return null;out.values=[...q.values];out.why=q.why;}
  if(q.source==='generated')out.source='generated';
+ if(q.analyses!==undefined){if(!Array.isArray(q.analyses)||q.analyses.length!==out.options.length||q.analyses.some(a=>!a||typeof a.reason!=='string'||a.reason.length>1500||typeof a.caution!=='string'||a.caution.length>1500))return null;out.analyses=q.analyses.map(a=>({reason:a.reason,caution:a.caution}));}
  if(q.reference!==undefined){if(!out.options.includes(q.reference))return null;out.reference=q.reference;}
  return out;
 }

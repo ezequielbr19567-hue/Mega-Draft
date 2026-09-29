@@ -92,7 +92,7 @@ function selectMode(mode){selectedMode=mode;document.querySelectorAll('[data-mod
 let preparing=false;
 async function launch(mode=selectedMode,retries=null){
  if(preparing)return;preparing=true;
- const buttons=['startBtn','dailyBtn','dueBtn'].map(id=>({el:$(id),disabled:$(id).disabled}));buttons.forEach(b=>b.el.disabled=true);
+ const buttons=['startBtn','dailyBtn','dueBtn','openingBtn','closingBtn'].map(id=>({el:$(id),disabled:$(id).disabled}));buttons.forEach(b=>b.el.disabled=true);
  $('assetStatus').textContent='Preparando imagens das cartas. O relógio só começa depois.';
  try{const failures=await preloadArtwork();$('assetStatus').textContent='';start(mode,retries);$('imageWarning').hidden=!failures;$('imageWarning').textContent=failures?'Algumas imagens não carregaram a tempo. Os nomes continuam disponíveis. Se persistir, confira se a pasta assets/cards foi enviada ao GitHub.':'';}finally{preparing=false;buttons.forEach(b=>b.el.disabled=b.disabled);}
 }
@@ -149,7 +149,7 @@ function pick(name,expired=false){
 function reflect(entry){state.pending=entry;applyBoardLayout();$('feedback').hidden=true;$('nextBtn').hidden=true;$('reflection').hidden=false;$('turn').textContent='Escolha registrada';$('turnHelp').textContent='Agora, pense no motivo. O relógio está parado.';$('reflection').scrollIntoView({behavior:'instant',block:'start'});$('sureBtn').focus({preventScroll:true});}
 function reveal(confidence=null){if(!state?.pending)return;const entry=state.pending;entry.confidence=confidence;state.pending=null;$('reflection').hidden=true;showFeedback(entry);$('nextBtn').hidden=false;$('nextBtn').textContent=state.mode==='learn'?'Continuar draft →':state.index+1>=state.queue.length?'Ver resultado →':'Próxima decisão →';$('feedback').scrollIntoView({behavior:'instant',block:'start'});$('nextBtn').focus({preventScroll:true});}
 function verdict(e){return e.expired?'Tempo esgotado':e.quality>=80?'Boa decisão':e.quality>=55?'Há uma opção mais útil':'Prioridade a revisar';}
-function showFeedback(e){$('turn').textContent='Confira sua escolha';$('turnHelp').textContent='Relógio parado.';$('feedback').hidden=false;$('feedback').innerHTML=`<h3 class="${e.quality>=80?'good':'warn'}">${esc(verdict(e))} · ${e.elapsed.toFixed(1)}s</h3><p class="muted">${e.expired?'Sem escolha no prazo.':'Você escolheu '+esc(e.card)+'.'}</p><p><b>${e.card===e.best?'Sua escolha é a referência.':'Referência: '+esc(e.best)+'.'}</b> ${esc(e.reason)}</p>${e.caution?`<p class="warn">${esc(e.caution)}</p>`:''}<details><summary>Entender a avaliação</summary>${e.chosenReason&&e.card!==e.best?`<p>Sua opção: ${esc(e.chosenReason)}</p>`:''}<p class="muted">${e.assisted?'Sugestão utilizada. ':''}A avaliação é didática. Outras opções também podem funcionar.</p></details>`;}
+function showFeedback(e){$('turn').textContent='Confira sua escolha';$('turnHelp').textContent='Relógio parado.';$('feedback').hidden=false;$('feedback').innerHTML=`<h3 class="${e.quality>=80?'good':'warn'}">${esc(verdict(e))} · ${e.elapsed.toFixed(1)}s</h3><p class="muted">${e.expired?'Sem escolha no prazo.':'Você escolheu '+esc(e.card)+'.'}</p><p><b>${e.card===e.best?'Sua escolha é a referência.':'Referência: '+esc(e.best)+'.'}</b> ${esc(e.reason)}</p>${e.caution?`<p class="warn">${esc(e.caution)}</p>`:''}<details><summary>Comparar as opções</summary>${comparisonHTML(e)}</details><details><summary>Entender a avaliação</summary>${e.chosenReason&&e.card!==e.best?`<p>Sua opção: ${esc(e.chosenReason)}</p>`:''}<p class="muted">${e.assisted?'Sugestão utilizada. ':''}A avaliação é didática. Outras opções também podem funcionar.</p></details>`;}
 function next(){if(!state||state.finished||state.pending||state.active)return;$('nextBtn').hidden=true;$('feedback').hidden=true;if(state.mode==='learn'){window.scrollTo({top:0,behavior:'instant'});nextTurn();}else{state.index++;if(state.index>=state.queue.length)finish();else loadDrill();}}
 function cardKind(c){return c.roles.includes('wincon')?'attack':c.roles.some(r=>['smallSpell','bigSpell'].includes(r))||c.name==='Tornado'?'spell':'defense';}
 function renderDeck(id,deck){$(id).innerHTML=Array.from({length:8},(_,i)=>deck[i]?`<div class="slot" title="${esc(deck[i].name)} · ${deck[i].e} elixir" aria-label="${esc(deck[i].name)}, ${deck[i].e} elixir">${cardArtwork(deck[i],'deck-art')}<span class="deck-cost">${deck[i].e}</span><b class="slot-label">${esc(deck[i].name)}</b></div>`:`<div class="slot empty" aria-label="Posição ${i+1}, ainda não escolhida">${i+1}</div>`).join('');}
@@ -185,7 +185,8 @@ function finish(){
  const overconfident=log.filter(e=>e.confidence==='sure'&&e.quality<80).length;
  const newCount=log.filter(e=>!e.isReview).length;
  $('retentionNote').textContent=`${newCount} situações novas · ${log.length-newCount} repetidas. ${overconfident?`${overconfident} escolhas pareciam certas, mas merecem revisão: compare o motivo, não só a carta. `:''}Repetir agora não comprova retenção. Volte às revisões em outro dia. Se perdeu atenção, encerre aqui e retome depois.`;
- $('reviews').innerHTML=log.map((e,i)=>`<article class="review"><b>${i+1}. ${esc(e.card)} — ${esc(verdict(e))}</b><p>${e.elapsed.toFixed(1)}s · ${e.expired?'Sem decisão no prazo':e.quality+'/100'}${e.assisted?' · com sugestão':''}</p><p>Referência: <b>${esc(e.best)}</b>. ${esc(e.reason)}</p>${e.caution?`<p>${esc(e.caution)}</p>`:''}</article>`).join('');
+ $('reviews').innerHTML=log.map((e,i)=>`<article class="review"><b>${i+1}. ${esc(e.card)} — ${esc(verdict(e))}</b><p>${e.elapsed.toFixed(1)}s · ${e.expired?'Sem decisão no prazo':e.quality+'/100'}${e.assisted?' · com sugestão':''}</p><p>Referência: <b>${esc(e.best)}</b>. ${esc(e.reason)}</p>${e.caution?`<p>${esc(e.caution)}</p>`:''}<details><summary>Comparar cartas desta decisão</summary>${comparisonHTML(e)}</details></article>`).join('');
+ renderDebrief();
  history.push({date:new Date().toISOString(),mode:state.mode,limit:state.limit,quality,onTime,seconds,assisted:log.some(e=>e.assisted),count:log.length});history=history.slice(-30);save();log.forEach(e=>scheduleDecision(e));saveLearning();$('report').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function renderProgress(){
@@ -194,15 +195,19 @@ function renderProgress(){
  const last=history.filter(h=>h.mode==='draft'&&h.limit===10&&!h.assisted).slice(-3);
  $('plan').textContent=last.length===3&&last.every(h=>h.quality>=80&&h.onTime>=90)?'Você manteve qualidade e prazo em 3 drafts de 10s. Experimente 7s; volte a 10s se a qualidade cair.':'Plano: entenda sem tempo, pratique decisões rápidas e aplique no draft de 10s. Busque 80/100 de qualidade e 90% no prazo em 3 drafts antes de acelerar.';
  $('storageNote').textContent=storageOK?'O progresso fica apenas neste navegador.':'O navegador não permitiu salvar o progresso. Você ainda pode treinar nesta sessão.';
- renderLearning();
+ renderLearning();renderFocusSummary();
 }
-function goHome(){clearTimers();state=null;document.body.classList.remove('training-active','board-fit');$('training').hidden=true;$('home').hidden=false;renderProgress();window.scrollTo({top:0,behavior:'instant'});}
+function goHome(){clearTimers();state=null;document.body.classList.remove('training-active','board-fit','quick-fit');$('training').hidden=true;$('home').hidden=false;renderProgress();window.scrollTo({top:0,behavior:'instant'});}
 document.querySelectorAll('[data-mode]').forEach(el=>el.addEventListener('click',()=>selectMode(el.dataset.mode)));
 document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',()=>{if(state){state.filter=el.dataset.filter;render();}}));
  $('deckToggle').addEventListener('click',()=>{const hidden=!$('deckArea').hidden;$('deckArea').hidden=hidden;$('deckToggle').setAttribute('aria-expanded',String(!hidden));$('deckToggle').textContent=hidden?'Ver meu deck':'Recolher meu deck';});
 $('sureBtn').addEventListener('click',()=>reveal('sure'));$('unsureBtn').addEventListener('click',()=>reveal('unsure'));$('skipReflectionBtn').addEventListener('click',()=>reveal());
 $('dailyBtn').addEventListener('click',()=>{$('duration').value='10';launch('flash',dailyQueue());});
 $('dueBtn').addEventListener('click',()=>{const due=dueReviews().slice(0,8);if(due.length)launch('retry',due.map(r=>r.snapshot));});
+$('libraryPanel').addEventListener('toggle',()=>{if($('libraryPanel').open)renderLibrary();});
+$('cardSearch').addEventListener('input',renderLibrary);
+$('openingBtn').addEventListener('click',()=>launch('flash',focusedPractice('opening')));
+$('closingBtn').addEventListener('click',()=>launch('flash',focusedPractice('closing')));
 $('exportBtn').addEventListener('click',exportProgress);$('importFile').addEventListener('change',importProgress);
 $('startBtn').addEventListener('click',()=>launch());$('exitBtn').addEventListener('click',()=>{if(state?.finished||confirm('Encerrar esta sessão? O treino incompleto não entra no histórico.'))goHome();});$('homeBtn').addEventListener('click',goHome);$('nextBtn').addEventListener('click',next);
 $('retryBtn').addEventListener('click',()=>start('retry',state.mistakes));$('hintBtn').addEventListener('click',()=>{if(state?.active){state.hints=!state.hints;render();}});

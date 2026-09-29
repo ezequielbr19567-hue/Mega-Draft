@@ -6,6 +6,17 @@ As cartas têm imagens locais. A visão geral móvel mantém as 36 posições em
 
 ## Comece aqui
 
+### Atualização: laboratório e revisão visual
+
+- **Laboratório de decisões:** oito contextos novos para praticar a abertura (escolhas 2 e 3) ou o fechamento (7 e 8), usando o tempo selecionado no treino livre.
+- **Comparar opções:** após responder, veja imagens, notas e justificativas de até três cartas, sempre incluindo sua escolha manual. A comparação também fica no relatório.
+- **Diagnóstico da sessão:** sequência visual das decisões, escolhas próximas ao prazo e leitura das funções e ameaças do deck final.
+- **Foco sugerido:** usa primeiras tentativas recentes, sem misturar repetições na porcentagem.
+- **Biblioteca visual:** consulte as 59 cartas e busque pelo nome ou função, incluindo buscas sem acentos.
+- **Exercícios no celular:** quatro opções em uma tela compacta em viewports compatíveis de até 600px de largura e pelo menos 640px de altura. A opção ampliada permanece disponível.
+
+As justificativas de situações geradas ficam salvas junto com o contexto original, inclusive nos backups. O histórico anterior continua compatível.
+
 Abra `mega_draft_coach.html` no navegador, mantendo todos os CSS e JS ao lado. Para usar no celular pela internet, siga [GitHub + Vercel](PUBLICAR-GITHUB-VERCEL.md).
 
 Mantenha também a pasta `assets/cards` com os 59 PNGs. Os créditos e a origem estão em `assets/NOTICE.md` e `assets/sources.json`.
