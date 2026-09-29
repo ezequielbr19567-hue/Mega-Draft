@@ -5,7 +5,7 @@ const html=fs.readFileSync('mega_draft_coach.html','utf8');
 const ids=new Set([...html.matchAll(/id="([^"]+)"/g)].map(m=>m[1]));
 const context=vm.createContext({console,performance:{now:()=>now},document:{getElementById:id=>{assert.ok(ids.has(id),'DOM id '+id);return element(id);},querySelectorAll:()=>[],addEventListener(){},activeElement:null},window:{scrollTo(){}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},confirm:()=>true,setTimeout:f=>{const id=++nextId;timeouts.set(id,f);return id;},clearTimeout:id=>timeouts.delete(id),setInterval:f=>{const id=++nextId;intervals.set(id,f);return id;},clearInterval:id=>intervals.delete(id)});
 context.document.body=element('body');
-vm.runInContext(fs.readFileSync('cards.js','utf8')+'\n'+fs.readFileSync('card-images.js','utf8')+'\n'+fs.readFileSync('learning.js','utf8')+'\n'+fs.readFileSync('coach.js','utf8'),context);
+vm.runInContext(['cards.js','card-images.js','learning.js','practice.js','board.js','coach.js'].map(f=>fs.readFileSync(f,'utf8')).join('\n'),context);
 const run=s=>vm.runInContext(s,context);
 function flushBot(){const item=timeouts.entries().next().value;if(item){timeouts.delete(item[0]);item[1]();}}
 assert.equal(run('new Set(CATALOG.map(c=>c.name)).size'),run('CATALOG.length'));
@@ -73,5 +73,16 @@ async function testImagePreparation(){
  const failing=run('launch("flash")');pending.forEach(img=>img.onerror());await failing;
  assert.equal(element('imageWarning').hidden,false);assert.equal(run('state.active'),true,'Names remain usable when assets fail');run('goHome()');
  console.log('PASS: preloading blocks the clock, all 59 assets requested, artwork rendered, image failure keeps text fallback.');
+ const generatedIds=new Set();for(let i=0;i<100;i++){const q=run('generateSituation()');context.sampleSituation=q;assert.ok(run('cleanSnapshot(sampleSituation)'));assert.ok(q.me.length>=2&&q.me.length<=7);assert.equal(q.options.length,4);assert.equal(q.values[q.options.indexOf(q.reference)],100);generatedIds.add(run('snapshotId(sampleSituation)'));}
+ assert.ok(generatedIds.size>=95,'New contexts should not be repetitions of the static bank');
+ assert.equal(run('variedPractice().filter(q=>q.source==="generated").length'),4);
+ assert.equal(run('new Set(variedPractice().filter(q=>!q.source).map(q=>q.topic)).size'),4);
+ assert.equal(run('cleanSnapshot({...DRILLS[0],reference:"unknown"})'),null);
+ context.window.innerWidth=390;context.window.innerHeight=740;run('start("draft")');while(!run('state.active'))flushBot();
+ assert.equal(run('compactBoard()'),true);const deadline=run('state.deadline');run('chooseCard(state.pool[0].name)');assert.equal(run('state.player.length'),0);assert.equal(run('state.deadline'),deadline,'Preview must not restart clock');assert.equal(element('confirmPick').disabled,false);
+ run('pick(state.selection)');assert.equal(run('state.player.length'),1);assert.equal(run('state.selection'),null);
+ run('switchBoard()');assert.equal(run('compactBoard()'),false);run('switchBoard()');assert.equal(run('compactBoard()'),true);
+ context.window.innerHeight=400;run('applyBoardLayout()');assert.equal(run('compactBoard()'),false,'Tiny viewport must fall back to readable detail layout');
+ run('goHome()');console.log('PASS: 100 generated contexts, four distinct guided topics, 6x6 preview/confirm without resetting timer, responsive fallback.');
 }
 testImagePreparation().catch(e=>{console.error(e);process.exitCode=1;});

@@ -17,9 +17,12 @@ mega_draft_coach.html
 coach.css
 mobile.css
 card-layout.css
+board.css
 cards.js
 card-images.js
 learning.js
+practice.js
+board.js
 coach.js
 icon.svg
 manifest.webmanifest
@@ -76,7 +79,7 @@ Você não precisa enviar a pasta `public`: a Vercel a recria usando `build-site
 | --- | --- |
 | Site com 404 | Se o build terminou e Output Directory é `public`; o script cria `index.html` ali. |
 | Erro “cannot find build-site.cjs” | Arquivo faltando ou Root Directory apontando para a pasta errada. |
-| Página sem estilo ou botões sem resposta | Os dois CSS e os três JS foram enviados com nomes e letras iguais? |
+| Página sem estilo ou botões sem resposta | Todos os CSS e JS da lista acima foram enviados com nomes e letras iguais? |
 | Site pede login da Vercel | Confira se abriu o domínio de produção e se há proteção de acesso habilitada no projeto. |
 | Progresso sumiu | Confira o mesmo aparelho, navegador e domínio. Navegação privada e limpeza de dados podem remover o histórico. Importe seu backup se disponível. |
 | Atualização não apareceu | Confira o último deployment da branch de produção e atualize a página. |

@@ -49,6 +49,7 @@ function evaluate(c,me,opp,available){
  if(has(me,'graveyard')&&(r.includes('miniTank')||c.name==='Veneno')||r.includes('graveyard')&&has(me,'miniTank'))add(8,'Um defensor que tanque a torre ajuda o plano de Cemitério.');
  if(has(me,'tank')&&r.includes('support'))add(6,'Oferece suporte ao tanque já escolhido.');
  if(r.includes('swarm')&&opp.some(x=>x.roles.includes('splash')||['Flechas','Veneno'].includes(x.name)))add(-10,'O rival já tem dano em área para suas tropas frágeis.');
+ if(['Torre Inferno','Dragão Infernal'].includes(c.name)&&has(opp,'reset'))add(-8,'O rival tem reset: proteja a carga de dano e evite depender só desta resposta.');
  if(r.includes('wincon')){const danger=Math.max(0,...opp.map(x=>answers(x,c)));if(danger>=10)add(-9,'O rival já mostrou uma resposta a este plano de ataque.');}
  if(me.length>=3&&average([...me,c])>4.3)add(-Math.round((average([...me,c])-4.3)*15),'Aumenta o peso do deck e dificulta responder com pouco elixir.');
  for(const role of ['building','smallSpell','bigSpell'])if(r.includes(role)&&count(me,role)>=(role==='building'?1:2))add(-12,`Repete ${roleNames[role]} enquanto outras vagas podem ser mais úteis.`);
@@ -102,13 +103,16 @@ function start(mode=selectedMode,retries=null){
  $('reflection').hidden=true;$('deckArea').hidden=false;$('deckToggle').setAttribute('aria-expanded','true');$('deckToggle').textContent='Recolher meu deck';
  $('home').hidden=true;$('training').hidden=false;$('report').hidden=true;$('feedback').hidden=true;$('nextBtn').hidden=true;$('hintBtn').hidden=mode!=='learn';$('training').classList.toggle('flash',mode==='flash'||mode==='retry');
  $('modeLabel').textContent={learn:'APRENDIZADO · SEM PRESSA',draft:`DRAFT · ${state.limit}s POR CARTA`,flash:`DECISÃO RÁPIDA · ${state.limit}s`,retry:`REPETIÇÃO · ${state.limit}s`}[mode];
- if(mode==='flash'||mode==='retry'){state.queue=retries?shuffle(retries):shuffle(DRILLS).slice(0,8);loadDrill();}else{state.all=makePool();state.pool=[...state.all];const first=Math.random()<.5?'player':'bot',other=first==='player'?'bot':'player';state.sequence=[first,other,other,first,first,other,other,first,first,other,other,first,first,other,other,first];nextTurn();}
+ if(mode==='flash'||mode==='retry'){state.queue=retries?shuffle(retries):variedPractice();loadDrill();}else{state.all=makePool();state.pool=[...state.all];const first=Math.random()<.5?'player':'bot',other=first==='player'?'bot':'player';state.sequence=[first,other,other,first,first,other,other,first,first,other,other,first,first,other,other,first];nextTurn();}
  window.scrollTo({top:0,behavior:'instant'});
 }
 function loadDrill(){
+ state.selection=null;
+ $('modeLabel').textContent=`${state.queue[state.index].source==='generated'?'SITUAÇÃO GERADA':'EXERCÍCIO GUIADO'} · ${state.limit}s`;
  const q=state.queue[state.index];state.current=q;state.player=q.me.map(x=>typeof x==='string'?cardByName(x):x);state.bot=q.opp.map(x=>typeof x==='string'?cardByName(x):x);state.pool=shuffle(q.options.map(x=>typeof x==='string'?cardByName(x):x));state.all=[...state.pool];state.active=true;state.hints=false;state.assisted=false;state.pending=null;$('reflection').hidden=true;$('feedback').hidden=true;$('nextBtn').hidden=true;render();window.scrollTo({top:0,behavior:'instant'});startClock();
 }
 function nextTurn(){
+ state.selection=null;
  if(state.turn>=16){finish();return;}
  state.active=state.sequence[state.turn]==='player';state.assisted=false;render();
  if(state.active)startClock();else{stopClock('…');const token=generation;botTimer=setTimeout(()=>{if(token!==generation||!state||state.finished)return;const ranked=rank(state.bot,state.player,state.pool);const options=ranked.filter(x=>ranked[0].score-x.score<=5).slice(0,3);const c=shuffle(options)[0].c;state.bot.push(c);state.lastBot=c.name;state.pool=state.pool.filter(x=>x!==c);state.turn++;nextTurn();},1200);}
@@ -131,7 +135,7 @@ function pick(name,expired=false){
  let entry;
  if(quick&&state.current.values){
   const q=state.current,i=q.options.indexOf(chosen?.name),bestIndex=q.values.indexOf(Math.max(...q.values));const quality=i<0?0:q.values[i];
-  entry={card:chosen?.name||'Sem escolha',best:q.options[bestIndex],quality,reason:q.why,caution:'',topic:q.topic,snapshot:q};
+  entry={card:chosen?.name||'Sem escolha',best:q.reference||q.options[bestIndex],quality,reason:q.why,caution:'',topic:q.topic,snapshot:q};
  }else{
   const ranked=rank(me,opp,available),best=ranked[0],chosenResult=chosen?ranked.find(x=>x.c===chosen):null;
   const delta=chosenResult?best.score-chosenResult.score:100;const quality=expired?0:Math.round(Math.max(0,100-Math.max(0,delta-5)*3));
@@ -142,7 +146,7 @@ function pick(name,expired=false){
  if(quick){render();reflect(entry);}
  else{state.player.push(chosen);state.pool=state.pool.filter(c=>c!==chosen);state.turn++;if(state.mode==='learn'){render();reflect(entry);}else nextTurn();}
 }
-function reflect(entry){state.pending=entry;$('feedback').hidden=true;$('nextBtn').hidden=true;$('reflection').hidden=false;$('turn').textContent='Escolha registrada';$('turnHelp').textContent='Agora, pense no motivo. O relógio está parado.';$('reflection').scrollIntoView({behavior:'instant',block:'start'});$('sureBtn').focus({preventScroll:true});}
+function reflect(entry){state.pending=entry;applyBoardLayout();$('feedback').hidden=true;$('nextBtn').hidden=true;$('reflection').hidden=false;$('turn').textContent='Escolha registrada';$('turnHelp').textContent='Agora, pense no motivo. O relógio está parado.';$('reflection').scrollIntoView({behavior:'instant',block:'start'});$('sureBtn').focus({preventScroll:true});}
 function reveal(confidence=null){if(!state?.pending)return;const entry=state.pending;entry.confidence=confidence;state.pending=null;$('reflection').hidden=true;showFeedback(entry);$('nextBtn').hidden=false;$('nextBtn').textContent=state.mode==='learn'?'Continuar draft →':state.index+1>=state.queue.length?'Ver resultado →':'Próxima decisão →';$('feedback').scrollIntoView({behavior:'instant',block:'start'});$('nextBtn').focus({preventScroll:true});}
 function verdict(e){return e.expired?'Tempo esgotado':e.quality>=80?'Boa decisão':e.quality>=55?'Há uma opção mais útil':'Prioridade a revisar';}
 function showFeedback(e){$('turn').textContent='Confira sua escolha';$('turnHelp').textContent='Relógio parado.';$('feedback').hidden=false;$('feedback').innerHTML=`<h3 class="${e.quality>=80?'good':'warn'}">${esc(verdict(e))} · ${e.elapsed.toFixed(1)}s</h3><p class="muted">${e.expired?'Sem escolha no prazo.':'Você escolheu '+esc(e.card)+'.'}</p><p><b>${e.card===e.best?'Sua escolha é a referência.':'Referência: '+esc(e.best)+'.'}</b> ${esc(e.reason)}</p>${e.caution?`<p class="warn">${esc(e.caution)}</p>`:''}<details><summary>Entender a avaliação</summary>${e.chosenReason&&e.card!==e.best?`<p>Sua opção: ${esc(e.chosenReason)}</p>`:''}<p class="muted">${e.assisted?'Sugestão utilizada. ':''}A avaliação é didática. Outras opções também podem funcionar.</p></details>`;}
@@ -150,6 +154,7 @@ function next(){if(!state||state.finished||state.pending||state.active)return;$(
 function cardKind(c){return c.roles.includes('wincon')?'attack':c.roles.some(r=>['smallSpell','bigSpell'].includes(r))||c.name==='Tornado'?'spell':'defense';}
 function renderDeck(id,deck){$(id).innerHTML=Array.from({length:8},(_,i)=>deck[i]?`<div class="slot" title="${esc(deck[i].name)} · ${deck[i].e} elixir" aria-label="${esc(deck[i].name)}, ${deck[i].e} elixir">${cardArtwork(deck[i],'deck-art')}<span class="deck-cost">${deck[i].e}</span><b class="slot-label">${esc(deck[i].name)}</b></div>`:`<div class="slot empty" aria-label="Posição ${i+1}, ainda não escolhida">${i+1}</div>`).join('');}
 function render(){
+ applyBoardLayout();
  const quick=state.mode==='flash'||state.mode==='retry';
  $('poolFilters').hidden=quick;
  $('deckSummary').textContent=`${state.player.length}/8 escolhidas`;
@@ -166,7 +171,7 @@ function render(){
  $('hintBtn').textContent=state.hints?'Ocultar sugestões':'Mostrar sugestões';$('hintBtn').disabled=!state.active;
  const suggested=state.hints&&state.active?rank(state.player,state.bot,state.pool).slice(0,3).map(x=>x.c.name):[];
  if(suggested.length)state.assisted=true;
- $('pool').innerHTML=state.all.map((c,i)=>{const own=state.player.includes(c),rival=state.bot.includes(c),taken=!state.pool.includes(c),disabled=!state.active||taken||state.finished;const primary=['wincon','smallSpell','bigSpell','building','tankKiller','antiAir','splash','miniTank'].find(r=>c.roles.includes(r))||c.roles[0];return `<button class="card ${taken?'claimed':''} ${suggested.includes(c.name)?'suggested':''}" data-kind="${cardKind(c)}" ${!quick&&state.filter!=='all'&&state.filter!==cardKind(c)?'hidden':''} data-card="${esc(c.name)}" ${disabled?'disabled':''} aria-label="${esc(c.name)}, ${c.e} elixir${taken?own?', escolhida por você':', escolhida pelo adversário':''}">${cardArtwork(c)}<span class="cost">◆ ${c.e}</span>${quick&&state.all.length===4?`<span class="key-hint">${i+1}</span>`:''}<strong>${esc(c.name)}</strong><span class="role">${taken?own?'Sua carta':rival?'Carta rival':'Indisponível':roleNames[primary]||'suporte'}</span>${suggested.includes(c.name)?'<span class="hint">Sugestão</span>':''}</button>`;}).join('');
+ $('pool').innerHTML=state.all.map((c,i)=>{const own=state.player.includes(c),rival=state.bot.includes(c),taken=!state.pool.includes(c),disabled=!state.active||taken||state.finished;const primary=['wincon','smallSpell','bigSpell','building','tankKiller','antiAir','splash','miniTank'].find(r=>c.roles.includes(r))||c.roles[0];return `<button class="card ${taken?'claimed':''} ${suggested.includes(c.name)?'suggested':''}" data-kind="${cardKind(c)}" ${!quick&&state.filter!=='all'&&state.filter!==cardKind(c)?'hidden':''} aria-pressed="${state.selection===c.name}" data-card="${esc(c.name)}" ${disabled?'disabled':''} aria-label="${esc(c.name)}, ${c.e} elixir${taken?own?', escolhida por você':', escolhida pelo adversário':''}">${cardArtwork(c)}<span class="cost">◆ ${c.e}</span>${quick&&state.all.length===4?`<span class="key-hint">${i+1}</span>`:''}<strong>${esc(c.name)}</strong><span class="role">${taken?own?'Sua carta':rival?'Carta rival':'Indisponível':roleNames[primary]||'suporte'}</span>${suggested.includes(c.name)?'<span class="hint">Sugestão</span>':''}</button>`;}).join('');
 }
 function finish(){
  if(state.finished)return;state.finished=true;state.active=false;clearTimers();stopClock();$('nextBtn').hidden=true;$('feedback').hidden=true;render();
@@ -191,7 +196,7 @@ function renderProgress(){
  $('storageNote').textContent=storageOK?'O progresso fica apenas neste navegador.':'O navegador não permitiu salvar o progresso. Você ainda pode treinar nesta sessão.';
  renderLearning();
 }
-function goHome(){clearTimers();state=null;document.body.classList.remove('training-active');$('training').hidden=true;$('home').hidden=false;renderProgress();window.scrollTo({top:0,behavior:'instant'});}
+function goHome(){clearTimers();state=null;document.body.classList.remove('training-active','board-fit');$('training').hidden=true;$('home').hidden=false;renderProgress();window.scrollTo({top:0,behavior:'instant'});}
 document.querySelectorAll('[data-mode]').forEach(el=>el.addEventListener('click',()=>selectMode(el.dataset.mode)));
 document.querySelectorAll('[data-filter]').forEach(el=>el.addEventListener('click',()=>{if(state){state.filter=el.dataset.filter;render();}}));
  $('deckToggle').addEventListener('click',()=>{const hidden=!$('deckArea').hidden;$('deckArea').hidden=hidden;$('deckToggle').setAttribute('aria-expanded',String(!hidden));$('deckToggle').textContent=hidden?'Ver meu deck':'Recolher meu deck';});
@@ -201,7 +206,10 @@ $('dueBtn').addEventListener('click',()=>{const due=dueReviews().slice(0,8);if(d
 $('exportBtn').addEventListener('click',exportProgress);$('importFile').addEventListener('change',importProgress);
 $('startBtn').addEventListener('click',()=>launch());$('exitBtn').addEventListener('click',()=>{if(state?.finished||confirm('Encerrar esta sessão? O treino incompleto não entra no histórico.'))goHome();});$('homeBtn').addEventListener('click',goHome);$('nextBtn').addEventListener('click',next);
 $('retryBtn').addEventListener('click',()=>start('retry',state.mistakes));$('hintBtn').addEventListener('click',()=>{if(state?.active){state.hints=!state.hints;render();}});
-$('pool').addEventListener('click',e=>{const button=e.target.closest('[data-card]');if(button&&!button.disabled)pick(button.dataset.card);});
+$('pool').addEventListener('click',e=>{const button=e.target.closest('[data-card]');if(button&&!button.disabled)chooseCard(button.dataset.card);});
+$('confirmPick').addEventListener('click',()=>{if(state?.selection)pick(state.selection);});$('viewBtn').addEventListener('click',switchBoard);
+function resizeBoard(){if(state&&!state.pending&&$('feedback').hidden)render();}
+window.addEventListener?.('resize',resizeBoard);window.visualViewport?.addEventListener('resize',resizeBoard);
 document.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.altKey||e.metaKey||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName))return;if(state?.active&&['flash','retry'].includes(state.mode)&&state.all.length===4&&/^[1-4]$/.test(e.key)){e.preventDefault();pick(state.all[Number(e.key)-1].name);}});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state?.active&&state.limit)tick();});
 document.addEventListener('error',event=>{if(event.target?.tagName==='IMG')event.target.parentElement.classList.add('image-missing');},true);

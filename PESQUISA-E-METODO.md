@@ -31,7 +31,7 @@ O roteiro “ameaça → necessidade → escolha” é uma forma de organizar a 
 
 ## O que foi implementado
 
-- Banco de **16 situações**, cobrindo oito temas e casos contrastantes. Cada sessão rápida sorteia oito. O banco ainda é pequeno: complementar com drafts aleatórios evita depender apenas da memorização.
+- Banco de **16 situações guiadas**, cobrindo oito temas e casos contrastantes. Cada sessão rápida mistura quatro temas distintos com quatro contextos novos, gerados a partir de escolhas válidas de drafts simulados. A seleção prioriza dificuldade por tema e exercícios ainda não vistos, evitando os recentes quando possível. O catálogo permanece com 59 cartas e o sorteio não reproduz a distribuição oficial do jogo.
 - **Treino do dia** combina até quatro revisões vencidas com outros exercícios, dando preferência aos ainda não vistos quando possível.
 - **Fila persistente** guarda até 60 contextos; os 400 registros de decisão mais recentes alimentam os indicadores. Resumos de até 30 sessões também são mantidos.
 - Resposta inadequada, tempo esgotado ou dúvida em uma revisão elegível encurtam o próximo intervalo para um dia. Acerto em revisão vencida pode aumentar para 3, 7 e 14 dias. Acertos antecipados não adiantam a próxima data.
@@ -48,8 +48,10 @@ O limiar de 80/100 e 90% no prazo em três drafts é um critério operacional pa
 
 ## Decisões para celular
 
-Alvos de ação de pelo menos 44px; cartões com nomes completos; texto sem fontes externas; zoom preservado; respeito à preferência por movimento reduzido; espaço para a área segura do aparelho. Durante exercícios rápidos, os decks usam texto compacto. O cabeçalho decorativo desaparece na sessão móvel. Os decks podem ser recolhidos, o tempo fica visível e o botão de continuar fica próximo ao polegar.
+Na visão geral, as imagens ocupam uma grade 6×6, com rival e relógio visíveis. As posições permanecem estáveis após escolhas. Um toque seleciona e mostra o nome, e um botão de 44px confirma; o relógio não reinicia. As miniaturas encolhem conforme a tela, por isso a visualização ampliada continua disponível. Em paisagem compatível, a grade muda para 9×4. A visão geral exige viewport de pelo menos 300×520 ou 600×340 pixels CSS, com largura de até 900px. Abaixo desses limites, o app mantém cartões maiores com rolagem.
 
-O pool completo pode precisar de rolagem. Os filtros Ataque, Defesa e Feitiços reduzem a busca, mantendo as posições dentro do filtro. Não recomendo esconder cartas automaticamente com base na resposta sugerida: isso treinaria seguir o sistema em vez de ler o draft.
+A visão ampliada conserva filtros e nomes completos. Nenhuma carta é escondida por ser uma escolha ruim. A organização busca favorecer reconhecimento com informações visíveis, conforme a [heurística de reconhecimento em vez de recordação](https://www.nngroup.com/articles/recognition-and-recall/). Misturar problemas também tem suporte em um [estudo com estudantes de física](https://www.nature.com/articles/s41539-021-00110-x); aplicar isso ao draft é uma hipótese de design, não uma eficácia demonstrada neste jogo.
+
+As situações geradas usam o avaliador heurístico do app, aceitam alternativas com pontuações próximas e informam sua origem automática. Não equivalem a análise de um jogador profissional. Os testes verificam a validade dos contextos e o fluxo de seleção, mas a legibilidade e a rapidez precisam de inspeção visual e uso em celulares reais.
 
 Pesquisa consultada em 29/09/2026.

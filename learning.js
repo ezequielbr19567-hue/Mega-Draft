@@ -14,6 +14,8 @@ function cleanSnapshot(q){
  const out={topic:q.topic,prompt:q.prompt,me:namesOf(q.me),opp:namesOf(q.opp),options:namesOf(q.options)};
  if(new Set([...out.me,...out.opp,...out.options]).size!==out.me.length+out.opp.length+out.options.length)return null;
  if(q.values!==undefined){if(!Array.isArray(q.values)||q.values.length!==q.options.length||q.values.some(n=>!Number.isFinite(n)||n<0||n>100)||typeof q.why!=='string'||q.why.length>1500)return null;out.values=[...q.values];out.why=q.why;}
+ if(q.source==='generated')out.source='generated';
+ if(q.reference!==undefined){if(!out.options.includes(q.reference))return null;out.reference=q.reference;}
  return out;
 }
 function validateMemory(data){
@@ -43,8 +45,9 @@ function scheduleDecision(e,now=Date.now()){
 }
 function dailyQueue(){
  const due=dueReviews().slice(0,4).map(r=>r.snapshot),used=new Set(due.map(snapshotId));
- const fresh=shuffle(DRILLS).filter(q=>!used.has(snapshotId(q))).sort((a,b)=>Number(memory.attempts.some(x=>x.id===snapshotId(a)))-Number(memory.attempts.some(x=>x.id===snapshotId(b))));
- return shuffle([...due,...fresh.slice(0,8-due.length)]);
+ const result=[...due];for(const q of variedPractice(8-due.length)){if(!used.has(snapshotId(q))){result.push(q);used.add(snapshotId(q));}}
+ while(result.length<8){const q=generateSituation();if(!used.has(snapshotId(q))){result.push(q);used.add(snapshotId(q));}}
+ return shuffle(result);
 }
 function renderLearning(){
  const due=dueReviews(),attempts=memory.attempts,novel=attempts.filter(x=>!x.review),review=attempts.filter(x=>x.review),percent=a=>a.length?Math.round(100*a.filter(x=>x.quality>=80&&!x.expired).length/a.length)+'%':'—';

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="coach.css">
 <link rel="stylesheet" href="mobile.css">
 <link rel="stylesheet" href="card-layout.css">
+<link rel="stylesheet" href="board.css">
 </head>
 <body>
 <header><div class="brand"><span class="brand-icon" aria-hidden="true">M</span><div><strong>MEGA DRAFT <span>COACH</span></strong><small>Treine sua próxima escolha.</small></div></div><span class="offline">Clash Royale</span></header>
@@ -36,7 +37,8 @@
 <div id="scenario" class="scenario" hidden></div>
 <div class="board-tools"><button class="secondary small-button" id="deckToggle" aria-expanded="true" aria-controls="deckArea">Recolher meu deck</button><span id="deckSummary" class="muted"></span></div>
 <div class="decks" id="deckArea"><section class="panel"><div class="section-heading"><h2>Seu deck <span id="playerCount"></span></h2><span class="muted" id="elixir"></span></div><div class="deck" id="playerDeck"></div><div class="coverage" id="coverage"></div></section></div>
-<section class="panel pool-panel"><div class="section-heading"><h2 id="poolTitle">Cartas disponíveis</h2><button class="secondary small-button" id="hintBtn" hidden>Mostrar sugestões</button></div><div class="filters" id="poolFilters" role="group" aria-label="Filtrar cartas por função"><button data-filter="all" aria-pressed="true">Todas</button><button data-filter="attack" aria-pressed="false">Ataque</button><button data-filter="defense" aria-pressed="false">Defesa</button><button data-filter="spell" aria-pressed="false">Feitiços</button></div><div class="cards" id="pool"></div><details class="pool-instructions"><summary>Como escolher</summary><p class="muted" id="poolHelp"></p></details></section>
+<section class="panel pool-panel"><div class="section-heading"><h2 id="poolTitle">Cartas disponíveis</h2><button class="secondary small-button" id="hintBtn" hidden>Mostrar sugestões</button><button class="secondary small-button" id="viewBtn" aria-pressed="false">Ampliar cartas</button></div><div class="filters" id="poolFilters" role="group" aria-label="Filtrar cartas por função"><button data-filter="all" aria-pressed="true">Todas</button><button data-filter="attack" aria-pressed="false">Ataque</button><button data-filter="defense" aria-pressed="false">Defesa</button><button data-filter="spell" aria-pressed="false">Feitiços</button></div><div class="cards" id="pool"></div><details class="pool-instructions"><summary>Como escolher</summary><p class="muted" id="poolHelp"></p></details></section>
+<div id="selectionBar" class="selection-bar" hidden><span id="selectionName" aria-live="polite">Toque na carta para ver o nome</span><button id="confirmPick" disabled>Escolher</button></div>
 <section id="feedback" class="panel feedback" hidden aria-live="polite"></section>
 <section id="reflection" class="panel reflection" hidden aria-labelledby="reflectionTitle"><span class="eyebrow">SEM PRESSA</span><h2 id="reflectionTitle">Qual foi sua prioridade?</h2><p>Pense no motivo da escolha. Você estava seguro?</p><div class="confidence-actions"><button id="sureBtn">Seguro</button><button class="secondary" id="unsureBtn">Em dúvida</button></div><button id="skipReflectionBtn" class="text-button">Ver explicação direto</button></section>
 <button id="nextBtn" hidden>Próxima decisão →</button>
@@ -44,5 +46,5 @@
 </section>
 <footer>MEGA DRAFT COACH <span>Uma prioridade por vez.</span></footer><p class="asset-credit">Imagens: <a href="https://github.com/RoyaleAPI/cr-api-assets" target="_blank" rel="noopener">RoyaleAPI / Supercell</a>. Conteúdo de fã não oficial, sem endosso da Supercell. <a href="https://supercell.com/en/fan-content-policy/" target="_blank" rel="noopener">Fan Content Policy</a>.</p>
 </main>
-<script src="cards.js"></script><script src="card-images.js"></script><script src="learning.js"></script><script src="coach.js"></script>
+<script src="cards.js"></script><script src="card-images.js"></script><script src="learning.js"></script><script src="practice.js"></script><script src="board.js"></script><script src="coach.js"></script>
 </body></html>
