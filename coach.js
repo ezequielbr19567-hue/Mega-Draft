@@ -5,7 +5,7 @@ CATALOG.find(c=>c.name==='Torre Inferno').roles.push('antiAir');
 // Tornado is a control spell, not a substitute for a reliable light damage spell.
 CATALOG.find(c=>c.name==='Tornado').roles=['control'];
 const $ = id => document.getElementById(id);
-const roleNames={wincon:'dano à torre',antiAir:'defesa aérea',tankKiller:'antitanque',smallSpell:'feitiço leve',bigSpell:'feitiço forte',splash:'dano em área',building:'construção',miniTank:'defensor',support:'suporte',swarm:'enxame',cycle:'ciclo',control:'controle',pressure:'pressão',tank:'tanque',reset:'reinício',bait:'isca',ground:'terrestre',air:'aéreo'};
+const roleNames={wincon:'dano à torre',antiAir:'defesa aérea',tankKiller:'antitanque',smallSpell:'feitiço leve',bigSpell:'feitiço forte',splash:'dano em área',building:'construção',miniTank:'defensor',support:'suporte',swarm:'enxame',cycle:'ciclo',control:'controle',pressure:'pressão',tank:'tanque',reset:'reinício',champion:'campeão',economy:'economia',bait:'isca',ground:'terrestre',air:'aéreo'};
 const cardByName=n=>CATALOG.find(c=>c.name===n);
 const cards=names=>names.map(cardByName);
 const has=(deck,r)=>deck.some(c=>c.roles.includes(r));
@@ -58,8 +58,17 @@ function evaluate(c,me,opp,available){
  const positive=parts.filter(p=>p.v>0).sort((a,b)=>b.v-a.v),negative=parts.filter(p=>p.v<0).sort((a,b)=>a.v-b.v);
  return {score:parts.reduce((s,p)=>s+p.v,0),reason:positive.slice(0,2).map(p=>p.why).join(' '),caution:negative[0]?.why||''};
 }
-function rank(me,opp,pool){return pool.map(c=>({c,...evaluate(c,me,opp,pool)})).sort((a,b)=>b.score-a.score);}
-function makePool(){const result=[];for(const [r,n] of [['wincon',6],['smallSpell',3],['bigSpell',3],['building',3],['antiAir',5]]){result.push(...shuffle(CATALOG.filter(c=>c.roles.includes(r)&&!result.includes(c))).slice(0,n));}result.push(...shuffle(CATALOG.filter(c=>!result.includes(c))).slice(0,36-result.length));return result.sort((a,b)=>a.e-b.e||a.name.localeCompare(b.name,'pt-BR'));}
+function rank(me,opp,pool){return pool.filter(c=>canPick(c,me)).map(c=>({c,...evaluate(c,me,opp,pool)})).sort((a,b)=>b.score-a.score);}
+function canPick(c,deck){return !c.roles.includes('champion')||!has(deck,'champion');}
+function makePool(){
+ const result=[];
+ for(const group of DRAFT_GROUPS){
+  const available=CATALOG.filter(c=>group.cards.includes(c.key)&&!result.includes(c));
+  if(available.length<group.count)throw Error('Grupo sem cartas suficientes: '+group.label);
+  result.push(...shuffle(available).slice(0,group.count));
+ }
+ return result;
+}
 const DRILLS=[
  {topic:'Defesa aérea',prompt:'O rival mostrou Balão. Você terá mais escolhas depois desta. Qual carta melhora mais sua defesa agora?',me:['Cavaleiro','Tronco','Corredor'],opp:['Balão','Bola de Fogo','Guardas'],options:['Mosqueteira','Mini P.E.K.K.A','Bombardeiro','Golem'],values:[100,25,10,5],why:'Mosqueteira oferece dano aéreo contínuo. Proteja-a e não dependa de uma tropa terrestre para parar o Balão.'},
  {topic:'Dano à torre',prompt:'Esta é sua última vaga. Qual escolha dá ao deck um plano claro de dano à torre?',me:['Cavaleiro','Mosqueteira','Tesla','Tronco','Bola de Fogo','Esqueletos','Espírito de Gelo'],opp:['Gigante','Mini P.E.K.K.A','Zap','Mago','Servos','Veneno','Guardas'],options:['Corredor','Valquíria','Canhão','Mago Elétrico'],values:[100,30,10,30],why:'Corredor completa a condição de vitória com apoio do ciclo e dos feitiços. Mais uma defesa deixa o deck sem pressão confiável.'},
@@ -127,9 +136,9 @@ function tick(){if(!state?.active||state.finished)return;const left=Math.max(0,(
 function pick(name,expired=false){
  if(!state?.active||state.finished)return;
  if(state.limit&&performance.now()>=state.deadline)expired=true;
- let chosen=state.pool.find(c=>c.name===name);if(!chosen&&!expired)return;
+ let chosen=state.pool.find(c=>c.name===name&&canPick(c,state.player));if(!chosen&&!expired)return;
  const elapsed=state.limit?Math.min(state.limit,(performance.now()-state.started)/1000):(performance.now()-state.started)/1000;
- const me=[...state.player],opp=[...state.bot],available=[...state.pool],quick=state.mode==='flash'||state.mode==='retry';
+ const me=[...state.player],opp=[...state.bot],available=state.pool.filter(c=>canPick(c,me)),quick=state.mode==='flash'||state.mode==='retry';
  if(expired)chosen=quick?null:shuffle(available)[0];
  state.active=false;stopClock();
  let entry;
@@ -167,11 +176,11 @@ function render(){
  const double=state.sequence[state.turn+1]==='player';
  $('turnHelp').textContent=state.finished?'Use a revisão para orientar o próximo treino.':state.active?(quick?'Escolha uma carta. Atalhos 1–4 quando houver quatro opções.':`Escolha ${state.player.length+1}/8 · ${double?'Você também faz a próxima escolha.':'Depois, o rival escolhe.'}`):'Prepare uma primeira opção e uma alternativa.';
  $('poolTitle').textContent=quick?'Qual carta você escolhe?':`Pool compartilhado · ${state.pool.length} disponíveis`;
- $('poolHelp').textContent=quick?'Leia os decks. Escolha por toque ou pelas teclas 1–4 quando houver 4 opções.':state.mode==='learn'?'Dicas opcionais. Escolha, explique seu motivo e confira.':`${state.filter==='all'?'Todas as funções.':'Filtro ativo: '+({attack:'ataque',defense:'defesa',spell:'feitiços'}[state.filter])+'.'} Tempo esgotado = carta aleatória. Posições fixas dentro do filtro.`;
+ $('poolHelp').textContent=quick?'Leia os decks. Escolha por toque ou pelas teclas 1–4 quando houver 4 opções.':state.mode==='learn'?'Dicas opcionais. Escolha, explique seu motivo e confira.':`${state.filter==='all'?'Todas as funções.':'Filtro ativo: '+({attack:'ataque',defense:'defesa',spell:'feitiços'}[state.filter])+'.'} Tempo esgotado = carta válida aleatória. Ordem por grupos do perfil clássico; 1 campeão por deck.`;
  $('hintBtn').textContent=state.hints?'Ocultar sugestões':'Mostrar sugestões';$('hintBtn').disabled=!state.active;
  const suggested=state.hints&&state.active?rank(state.player,state.bot,state.pool).slice(0,3).map(x=>x.c.name):[];
  if(suggested.length)state.assisted=true;
- $('pool').innerHTML=state.all.map((c,i)=>{const own=state.player.includes(c),rival=state.bot.includes(c),taken=!state.pool.includes(c),disabled=!state.active||taken||state.finished;const primary=['wincon','smallSpell','bigSpell','building','tankKiller','antiAir','splash','miniTank'].find(r=>c.roles.includes(r))||c.roles[0];return `<button class="card ${taken?'claimed':''} ${suggested.includes(c.name)?'suggested':''}" data-kind="${cardKind(c)}" ${!quick&&state.filter!=='all'&&state.filter!==cardKind(c)?'hidden':''} aria-pressed="${state.selection===c.name}" data-card="${esc(c.name)}" ${disabled?'disabled':''} aria-label="${esc(c.name)}, ${c.e} elixir${taken?own?', escolhida por você':', escolhida pelo adversário':''}">${cardArtwork(c)}<span class="cost">◆ ${c.e}</span>${quick&&state.all.length===4?`<span class="key-hint">${i+1}</span>`:''}<strong>${esc(c.name)}</strong><span class="role">${taken?own?'Sua carta':rival?'Carta rival':'Indisponível':roleNames[primary]||'suporte'}</span>${suggested.includes(c.name)?'<span class="hint">Sugestão</span>':''}</button>`;}).join('');
+ $('pool').innerHTML=state.all.map((c,i)=>{const own=state.player.includes(c),rival=state.bot.includes(c),taken=!state.pool.includes(c),locked=!canPick(c,state.player),disabled=!state.active||taken||locked||state.finished;const primary=['wincon','smallSpell','bigSpell','building','tankKiller','antiAir','splash','miniTank'].find(r=>c.roles.includes(r))||c.roles[0];return `<button class="card ${taken?'claimed':''} ${locked?'locked':''} ${suggested.includes(c.name)?'suggested':''}" data-kind="${cardKind(c)}" ${!quick&&state.filter!=='all'&&state.filter!==cardKind(c)?'hidden':''} aria-pressed="${state.selection===c.name}" data-card="${esc(c.name)}" ${disabled?'disabled':''} aria-label="${esc(c.name)}, ${c.e} elixir${taken?own?', escolhida por você':', escolhida pelo adversário':locked?', limite de um campeão por deck':''}">${cardArtwork(c)}<span class="cost">◆ ${c.e}</span>${quick&&state.all.length===4?`<span class="key-hint">${i+1}</span>`:''}<strong>${esc(c.name)}</strong><span class="role">${taken?own?'Sua carta':rival?'Carta rival':'Indisponível':locked?'Já tem campeão':roleNames[primary]||'suporte'}</span>${suggested.includes(c.name)?'<span class="hint">Sugestão</span>':''}</button>`;}).join('');
 }
 function finish(){
  if(state.finished)return;state.finished=true;state.active=false;clearTimers();stopClock();$('nextBtn').hidden=true;$('feedback').hidden=true;render();

@@ -31,7 +31,7 @@ O roteiro “ameaça → necessidade → escolha” é uma forma de organizar a 
 
 ## O que foi implementado
 
-- Banco de **16 situações guiadas**, cobrindo oito temas e casos contrastantes. Cada sessão rápida mistura quatro temas distintos com quatro contextos novos, gerados a partir de escolhas válidas de drafts simulados. A seleção prioriza dificuldade por tema e exercícios ainda não vistos, evitando os recentes quando possível. O catálogo permanece com 59 cartas e o sorteio não reproduz a distribuição oficial do jogo.
+- Banco de **16 situações guiadas**, cobrindo oito temas e casos contrastantes. Cada sessão rápida mistura quatro temas distintos com quatro contextos novos, gerados a partir de escolhas válidas de drafts simulados. A seleção prioriza dificuldade por tema e exercícios ainda não vistos, evitando os recentes quando possível. O catálogo tem 107 cartas do perfil clássico reconstruído com grupos históricos. Não é a tabela oficial atual; veja SORTEIO-E-CARTAS.md.
 - **Treino do dia** combina até quatro revisões vencidas com outros exercícios, dando preferência aos ainda não vistos quando possível.
 - **Fila persistente** guarda até 60 contextos; os 400 registros de decisão mais recentes alimentam os indicadores. Resumos de até 30 sessões também são mantidos.
 - Resposta inadequada, tempo esgotado ou dúvida em uma revisão elegível encurtam o próximo intervalo para um dia. Acerto em revisão vencida pode aumentar para 3, 7 e 14 dias. Acertos antecipados não adiantam a próxima data.

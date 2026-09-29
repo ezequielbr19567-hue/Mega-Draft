@@ -13,6 +13,6 @@ console.log('PASS: deployment index, unique ids, all local assets, current build
 const vm=require('node:vm');
 const catalogue=vm.runInNewContext(fs.readFileSync('cards.js','utf8')+fs.readFileSync('card-images.js','utf8')+';CARDS.map(c=>({name:c.name,file:cardImagePath(c.name)}))');
 for(const c of catalogue){const file=path.join(output,c.file);assert.ok(fs.existsSync(file),'Missing card image: '+c.name);const data=fs.readFileSync(file);assert.equal(data.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(data.readUInt32BE(16),150);assert.ok(data.readUInt32BE(20)>100);}
-assert.equal(new Set(catalogue.map(c=>c.file)).size,59);
+assert.equal(new Set(catalogue.map(c=>c.file)).size,107);
 assert.ok(html.indexOf('id="botDeck"')<html.indexOf('id="deckArea"'),'Rival is outside the collapsible player deck');
-console.log('PASS: every card mapped to a local PNG; 59 distinct images deployed; rival outside collapsible area.');
+console.log('PASS: every card mapped to a local PNG; 107 distinct images deployed; rival outside collapsible area.');

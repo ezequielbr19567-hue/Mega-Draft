@@ -41,7 +41,7 @@ function focusedPractice(stage){
  return result;
 }
 function comparisonRows(e){
- const q=e.snapshot,me=cards(namesOf(q.me)),opp=cards(namesOf(q.opp)),pool=cards(namesOf(q.options));
+ const q=e.snapshot,me=cards(namesOf(q.me)),opp=cards(namesOf(q.opp)),pool=cards(namesOf(q.options)).filter(c=>canPick(c,me));
  const ranked=rank(me,opp,pool),top=ranked[0]?.score||0;
  const rows=pool.map(c=>{const r=ranked.find(x=>x.c===c);return {c,quality:q.values?q.values[q.options.indexOf(c.name)]:Math.round(Math.max(0,100-Math.max(0,top-r.score-5)*3)),reason:q.analyses?.[q.options.indexOf(c.name)]?.reason||(q.source==='generated'?'Compare a função desta carta com as necessidades do deck. A análise individual não foi salva neste contexto antigo.':r.reason),caution:q.analyses?.[q.options.indexOf(c.name)]?.caution||(q.source==='generated'?'':r.caution)};});
  rows.sort((a,b)=>b.quality-a.quality);

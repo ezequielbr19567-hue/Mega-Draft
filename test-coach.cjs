@@ -19,6 +19,8 @@ for(let n=0;n<50;n++){
  while(!run('state.finished')){assert.ok(++safety<30);if(run('state.active')){now+=800;run('pick(rank(state.player,state.bot,state.pool)[0].c.name)');}else flushBot();}
  assert.equal(run('state.player.length'),8);assert.equal(run('state.bot.length'),8);assert.equal(run('state.pool.length'),20);assert.equal(run('new Set([...state.player,...state.bot].map(c=>c.name)).size'),16);assert.equal(run('state.log.length'),8);
  assert.equal(intervals.size,0);assert.equal(timeouts.size,0);
+ assert.ok(run('state.player.filter(c=>c.roles.includes("champion")).length')<=1);
+ assert.ok(run('state.bot.filter(c=>c.roles.includes("champion")).length')<=1);
 }
 console.log('PASS: 50 full drafts, snake order, pool/deck uniqueness, timer cleanup.');
 run('start("draft")');while(!run('state.active'))flushBot();now+=10001;run('tick()');assert.equal(run('state.log[0].expired'),true);assert.equal(run('state.log[0].quality'),0);assert.equal(run('state.player.length'),1);
@@ -65,14 +67,14 @@ assert.equal(run('cleanSnapshot({...DRILLS[0],options:["unknown"]})'),null);
 console.log('PASS: persisted reviews, backup round trip, invalid backups rejected. All checks passed.');
 async function testImagePreparation(){
  run('goHome()');const pending=[];context.Image=class{set src(value){this.url=value;pending.push(this);}};
- const launching=run('launch("draft")');assert.equal(run('state'),null,'Draft cannot start while images load');assert.equal(pending.length,59);
+ const launching=run('launch("draft")');assert.equal(run('state'),null,'Draft cannot start while images load');assert.equal(pending.length,107);
  pending.forEach(img=>img.onload());await launching;
  assert.equal(run('state.mode'),'draft');assert.equal(run('preparing'),false);assert.equal(element('imageWarning').hidden,true);
  assert.ok(element('pool').innerHTML.includes('class="pool-art"'));run('renderDeck("botDeck",cards(["Mosqueteira","Balão"]))');assert.equal((element('botDeck').innerHTML.match(/class="deck-art"/g)||[]).length,2);
  run('goHome();artworkLoad=null');pending.length=0;
  const failing=run('launch("flash")');pending.forEach(img=>img.onerror());await failing;
  assert.equal(element('imageWarning').hidden,false);assert.equal(run('state.active'),true,'Names remain usable when assets fail');run('goHome()');
- console.log('PASS: preloading blocks the clock, all 59 assets requested, artwork rendered, image failure keeps text fallback.');
+ console.log('PASS: preloading blocks the clock, all 107 assets requested, artwork rendered, image failure keeps text fallback.');
  const generatedIds=new Set();for(let i=0;i<100;i++){const q=run('generateSituation()');context.sampleSituation=q;assert.ok(run('cleanSnapshot(sampleSituation)'));assert.ok(q.me.length>=2&&q.me.length<=7);assert.equal(q.options.length,4);assert.equal(q.values[q.options.indexOf(q.reference)],100);generatedIds.add(run('snapshotId(sampleSituation)'));}
  assert.ok(generatedIds.size>=95,'New contexts should not be repetitions of the static bank');
  assert.equal(run('variedPractice().filter(q=>q.source==="generated").length'),4);
@@ -104,4 +106,20 @@ element('cardSearch').value='defesa aerea';run('renderLibrary()');assert.ok(elem
 element('cardSearch').value='<script>';run('renderLibrary()');assert.ok(element('cardLibrary').innerHTML.includes('Nenhuma carta'));
 run('goHome()');
 console.log('PASS: 80 focused contexts, original-pool explanations, comparison includes selection, deck audit, safe accent-insensitive library search.');
+const seenPoolCards=new Set();let preceding=null,overlap=0;
+const groupRules=run('DRAFT_GROUPS');
+for(let n=0;n<2000;n++){
+ const pool=run('makePool()');assert.equal(pool.length,36);assert.equal(new Set(pool.map(c=>c.key)).size,36);
+ let offset=0;for(const group of groupRules){const section=pool.slice(offset,offset+group.count);assert.ok(section.every(c=>group.cards.includes(c.key)),group.key+' membership/order');offset+=group.count;}
+ const names=new Set(pool.map(c=>c.name));if(preceding)overlap+=[...names].filter(name=>preceding.has(name)).length;preceding=names;
+ pool.forEach(c=>seenPoolCards.add(c.key));
+ assert.equal(pool.filter(c=>c.roles.includes('champion')).length,3);
+ assert.ok(pool.every(c=>!['mirror','clone'].includes(c.key)));
+}
+assert.equal(seenPoolCards.size,107,'Every supported card must be reachable');
+run('start("draft")');while(!run('state.active'))flushBot();
+run('pick(state.pool.find(c=>c.roles.includes("champion")).name)');while(!run('state.active'))flushBot();
+const beforeIllegal=run('state.log.length');run('pick(state.pool.find(c=>c.roles.includes("champion")).name)');assert.equal(run('state.log.length'),beforeIllegal,'Second champion blocked');
+now+=11000;run('tick()');assert.equal(run('state.player.filter(c=>c.roles.includes("champion")).length'),1,'Timeout must not bypass champion restriction');run('goHome()');
+console.log(`PASS: 2000 category pools, all 107 reachable, no duplicates/excluded cards, champion restrictions incl. timeout. Mean overlap: ${(overlap/1999).toFixed(1)}/36.`);
 testImagePreparation().catch(e=>{console.error(e);process.exitCode=1;});

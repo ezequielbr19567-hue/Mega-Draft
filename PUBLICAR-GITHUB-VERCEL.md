@@ -28,12 +28,20 @@ icon.svg
 manifest.webmanifest
 build-site.cjs
 vercel.json
-assets/                  (mantenha esta pasta, incluindo cards/ e seus 59 PNGs)
+assets/                  (mantenha esta pasta, incluindo cards/ e seus 107 PNGs)
 ```
 
 O pacote `mega-draft-github.zip` contém esses arquivos e a documentação. **Extraia o ZIP antes de enviar; enviar só o ZIP não publica o app.** Não envie backups do seu progresso. A versão antiga `mega_draft_coach.original.html` pode continuar só no computador.
 
-**Nesta versão, envie também a pasta `assets` inteira na raiz.** Não retire as imagens de dentro de `assets/cards`. Arraste os arquivos e a pasta `assets` para a área de upload do GitHub, sem arrastar a pasta externa que o descompactador criou. Os caminhos precisam ficar como `assets/cards/knight.png`.
+**Esta versão ultrapassa 100 arquivos.** Para enviar pelo navegador, use os pacotes `github-envio-1.zip` e `github-envio-2.zip`, que dividem o mesmo projeto em dois lotes menores que 100 arquivos:
+
+1. Extraia cada ZIP em uma pasta separada.
+2. Na raiz do repositório, abra **Add file → Upload files**. Arraste o conteúdo de dentro da primeira pasta extraída e salve o commit.
+3. Volte à raiz do mesmo repositório e repita com o conteúdo da segunda pasta. As pastas `assets` serão combinadas pelos caminhos; os arquivos existentes serão atualizados.
+4. Não arraste a pasta externa chamada `github-envio-1` ou `github-envio-2`. O caminho final deve continuar sendo `assets/cards/knight.png`.
+5. Aguarde o deployment depois dos dois envios. O primeiro lote sozinho não é o projeto completo.
+
+O ZIP `mega-draft-github.zip` continua sendo a versão completa, para uso local ou publicação por Git/GitHub Desktop. O GitHub aceita até 100 arquivos por envio via navegador, conforme a documentação abaixo.
 
 O GitHub permite carregar arquivos existentes e registrar o envio como um commit. [Documentação de upload](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository).
 
