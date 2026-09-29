@@ -1,0 +1,228 @@
+{
+  "profile": "Classic reconstruction, not the current live configuration",
+  "catalogSize": 107,
+  "dataRevision": "d5461b0a59bff33c4da2fc845b07275b66b2d6ff",
+  "dataDate": "2023-10-18T00:23:16Z",
+  "dataSource": "https://github.com/RoyaleAPI/cr-api-data/tree/d5461b0a59bff33c4da2fc845b07275b66b2d6ff/docs/json",
+  "countsSource": "https://www.reddit.com/r/ClashRoyale/comments/10xrhab/",
+  "countsStatus": "Community reconstruction; group memberships are historical regular-draft data, not a verified Mega Draft table.",
+  "groups": [
+    {
+      "key": "TankUnit",
+      "label": "Tanques",
+      "count": 4,
+      "cards": [
+        "rascals",
+        "giant",
+        "golem",
+        "knight",
+        "lava-hound",
+        "ice-golem",
+        "miner",
+        "royal-giant",
+        "valkyrie",
+        "royal-recruits",
+        "goblin-giant",
+        "elixir-golem",
+        "electro-giant",
+        "goblin-drill",
+        "giant-skeleton",
+        "bowler",
+        "mega-knight"
+      ]
+    },
+    {
+      "key": "AntiAir",
+      "label": "Defesa aérea",
+      "count": 4,
+      "cards": [
+        "archers",
+        "executioner",
+        "bats",
+        "baby-dragon",
+        "dart-goblin",
+        "electro-wizard",
+        "flying-machine",
+        "hunter",
+        "ice-wizard",
+        "inferno-dragon",
+        "magic-archer",
+        "mega-minion",
+        "minion-horde",
+        "minions",
+        "musketeer",
+        "princess",
+        "spear-goblins",
+        "witch",
+        "wizard",
+        "zappies",
+        "electro-dragon",
+        "firecracker",
+        "skeleton-dragons",
+        "phoenix",
+        "night-witch",
+        "mother-witch"
+      ]
+    },
+    {
+      "key": "Distractions",
+      "label": "Distrações",
+      "count": 4,
+      "cards": [
+        "fire-spirit",
+        "goblin-gang",
+        "goblins",
+        "ice-golem",
+        "ice-spirit",
+        "minions",
+        "skeleton-army",
+        "skeletons",
+        "guards",
+        "spear-goblins",
+        "electro-spirit",
+        "bomber",
+        "heal-spirit"
+      ]
+    },
+    {
+      "key": "DirectDamage",
+      "label": "Feitiços 1",
+      "count": 4,
+      "cards": [
+        "arrows",
+        "fireball",
+        "lightning",
+        "the-log",
+        "poison",
+        "rocket",
+        "zap",
+        "giant-snowball",
+        "barbarian-barrel",
+        "earthquake",
+        "royal-delivery",
+        "rage"
+      ]
+    },
+    {
+      "key": "WinCons",
+      "label": "Ataque",
+      "count": 6,
+      "cards": [
+        "graveyard",
+        "giant",
+        "balloon",
+        "battle-ram",
+        "hog-rider",
+        "goblin-giant",
+        "goblin-barrel",
+        "miner",
+        "royal-hogs",
+        "royal-giant",
+        "skeleton-barrel",
+        "ram-rider",
+        "wall-breakers",
+        "elixir-golem",
+        "goblin-drill",
+        "three-musketeers"
+      ]
+    },
+    {
+      "key": "2ndSpell",
+      "label": "Feitiços 2",
+      "count": 2,
+      "cards": [
+        "arrows",
+        "fireball",
+        "lightning",
+        "the-log",
+        "poison",
+        "rocket",
+        "zap",
+        "giant-snowball",
+        "barbarian-barrel",
+        "tornado",
+        "earthquake",
+        "freeze"
+      ]
+    },
+    {
+      "key": "MiniTank",
+      "label": "Defensores",
+      "count": 3,
+      "cards": [
+        "knight",
+        "valkyrie",
+        "mini-pekka",
+        "miner",
+        "dark-prince",
+        "rascals",
+        "prince",
+        "cannon-cart",
+        "goblin-cage",
+        "fisherman",
+        "battle-healer",
+        "royal-ghost",
+        "bandit"
+      ]
+    },
+    {
+      "key": "AntiTank",
+      "label": "Antitanques",
+      "count": 3,
+      "cards": [
+        "elite-barbarians",
+        "cannon-cart",
+        "barbarians",
+        "bomb-tower",
+        "cannon",
+        "witch",
+        "inferno-dragon",
+        "inferno-tower",
+        "mini-pekka",
+        "tesla",
+        "hunter",
+        "rascals",
+        "lumberjack",
+        "pekka",
+        "goblin-cage",
+        "sparky"
+      ]
+    },
+    {
+      "key": "Champions",
+      "label": "Campeões",
+      "count": 3,
+      "cards": [
+        "golden-knight",
+        "archer-queen",
+        "skeleton-king",
+        "mighty-miner",
+        "monk"
+      ]
+    },
+    {
+      "key": "Investment",
+      "label": "Construções",
+      "count": 3,
+      "cards": [
+        "barbarian-hut",
+        "elixir-collector",
+        "furnace",
+        "goblin-hut",
+        "mortar",
+        "tombstone",
+        "x-bow",
+        "goblin-cage"
+      ]
+    }
+  ],
+  "excluded": [
+    "mirror",
+    "clone",
+    "temporary-event-cards",
+    "evolutions",
+    "tower-troops",
+    "heroes"
+  ],
+  "unmodeled": "Cards introduced after this snapshot. Champion abilities and arena combat are not simulated."
+}
