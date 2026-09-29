@@ -1,0 +1,72 @@
+/* Rival and timer share one sticky container: no competing sticky offsets. */
+html { scroll-padding-top: 225px; }
+.battle-hud { position: sticky; top: 0; z-index: 20; background: var(--bg); padding: 5px 0 10px; margin-bottom: 10px; box-shadow: 0 10px 16px #0c111ba8; }
+.battle-hud .timer-panel { position: relative; top: auto; margin: 0 0 6px; min-height: 58px; padding: 8px 14px 12px; }
+.rival-panel { padding: 9px 12px; background: #261e2d; border: 1px solid #755671; border-radius: 11px; }
+.rival-panel .section-heading { margin-bottom: 6px; }
+.rival-panel h2 { font-size: 14px; }
+.rival-panel h2 span { color: #d3aec9; font-size: 12px; }
+#botDeck,#playerDeck { display: grid; grid-template-columns: repeat(8,minmax(0,1fr)); gap: 6px; }
+#botDeck .slot,#playerDeck .slot { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; position: relative; padding: 0; min-width: 0; min-height: 65px; background: #101622; border: 1px solid #334057; border-radius: 6px; font-size: 10px; overflow: hidden; }
+#botDeck .slot { border-color: #59415e; }
+#botDeck .slot::after,#playerDeck .slot::after { content: none; }
+#botDeck .empty,#playerDeck .empty { display: grid; place-items: center; border-style: dashed; color: #8d7f98; }
+.deck-art { display: block; width: 100%; height: 65px; object-fit: contain; }
+.slot-label { font-size: 9px; line-height: 1.15; text-align: center; padding: 2px 1px; font-weight: 500; width: 100%; overflow-wrap: anywhere; }
+.deck-cost { position: absolute; top: 2px; left: 2px; border-radius: 5px; background: #66358c; color: white; font-size: 10px; padding: 0 4px; line-height: 16px; font-weight: 800; }
+.decks { grid-template-columns: 1fr; }
+.decks .panel { padding: 12px; }
+.cards { grid-template-columns: repeat(6,minmax(0,1fr)); }
+.cards .card { align-items: center; justify-content: flex-start; gap: 3px; padding: 6px 5px; text-align: center; }
+.pool-art { display: block; width: 100%; height: 125px; object-fit: contain; }
+.cards .card strong { font-size: 12px; line-height: 1.2; min-height: 28px; display: flex; align-items: center; justify-content: center; }
+.cards .card .cost { position: absolute; top: 6px; left: 5px; color: white; background: #623084; border: 1px solid #b888d9; border-radius: 7px; padding: 2px 4px; font-size: 12px; z-index: 1; }
+.cards .card .role { margin: 0; font-size: 10px; }
+.cards .card.claimed { opacity: .38; }
+.key-hint { position: absolute; top: 6px; right: 5px; background: #111c2e; color: #d3deef; border-radius: 4px; padding: 1px 4px; font-size: 10px; }
+.flash .cards { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.flash .pool-art { height: 150px; }
+#report,#reflection,#feedback { scroll-margin-top: 225px; }
+.asset-credit { color: var(--muted); font-size: 10px; padding: 0 0 20px; }
+.training-active .asset-credit { display: none; }
+.image-missing .deck-art,.image-missing .pool-art { visibility: hidden; }
+.image-missing .slot-label { color: #fff; font-weight: 700; }
+@media(max-width:600px) {
+  html { scroll-padding-top: 170px; }
+  .battle-hud { top: 0; padding: max(3px,env(safe-area-inset-top)) 0 7px; margin-bottom: 7px; }
+  .battle-hud .timer-panel { min-height: 53px; padding: 6px 10px 9px; margin-bottom: 4px; }
+  .battle-hud #turnHelp { font-size: 10px; max-width: none; }
+  .battle-hud .clock { font-size: 25px; min-width: 59px; }
+  .rival-panel { padding: 6px; border-radius: 8px; }
+  .rival-panel .section-heading { gap: 5px; margin-bottom: 4px; flex-wrap: nowrap; }
+  .rival-panel h2 { font-size: 12px; white-space: nowrap; }
+  #lastBot { font-size: 9px; text-align: right; }
+  #botDeck,#playerDeck { gap: 3px; }
+  #botDeck .slot,#playerDeck .slot { min-height: 54px; border-radius: 4px; }
+  .deck-art { height: 43px; width: 100%; }
+  .slot-label { font-size: 7px; line-height: 1.1; padding: 1px; }
+  .deck-cost { font-size: 8px; line-height: 12px; padding: 0 3px; top: 0; left: 0; border-radius: 3px; }
+  .board-tools { margin-bottom: 5px; }
+  .decks .panel { padding: 7px; }
+  .cards { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 5px; }
+  .cards .card { padding: 4px 2px; gap: 2px; min-height: 111px; }
+  .pool-art { height: 76px; }
+  .cards .card strong { font-size: 10px; line-height: 1.15; min-height: 24px; }
+  .cards .card .cost { font-size: 10px; padding: 1px 3px; top: 3px; left: 2px; }
+  .cards .card .role { font-size: 8px; }
+  .cards .card:not(.claimed) .role { display: none; }
+  .flash .cards { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; }
+  .flash .cards .card { min-height: 137px; padding: 5px; }
+  .flash .pool-art { height: 101px; }
+  .flash .cards .card strong { font-size: 12px; }
+  #report,#reflection,#feedback { scroll-margin-top: 170px; }
+  .filters button { min-height: 38px; }
+}
+@media(max-width:360px) { .pool-art { height: 65px; }.cards .card strong { font-size: 9px; }.cards .card { min-height: 99px; }.slot-label { font-size: 6.5px; } }
+@media(max-height:500px) and (orientation:landscape) {
+  .battle-hud { display: grid; grid-template-columns: 1fr 2fr; gap: 6px; }
+  .battle-hud .timer-panel { margin: 0; }
+  .slot-label { display: none; }
+  #botDeck .slot { min-height: 38px; }
+  .deck-art { height: 38px; }
+}

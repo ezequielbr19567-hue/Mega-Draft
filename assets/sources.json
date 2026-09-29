@@ -1,0 +1,302 @@
+{
+  "repository": "https://github.com/RoyaleAPI/cr-api-assets",
+  "revision": "b4530a1043b213ee2baf9c50a3d0d7fae22c2313",
+  "downloaded": "2026-09-29T18:33:58.874Z",
+  "images": [
+    {
+      "file": "archers.png",
+      "bytes": 46200,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/archers.png"
+    },
+    {
+      "file": "arrows.png",
+      "bytes": 41300,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/arrows.png"
+    },
+    {
+      "file": "baby-dragon.png",
+      "bytes": 41956,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/baby-dragon.png"
+    },
+    {
+      "file": "balloon.png",
+      "bytes": 46174,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/balloon.png"
+    },
+    {
+      "file": "barbarian-barrel.png",
+      "bytes": 46069,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/barbarian-barrel.png"
+    },
+    {
+      "file": "bats.png",
+      "bytes": 42018,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/bats.png"
+    },
+    {
+      "file": "battle-ram.png",
+      "bytes": 42110,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/battle-ram.png"
+    },
+    {
+      "file": "bomb-tower.png",
+      "bytes": 41769,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/bomb-tower.png"
+    },
+    {
+      "file": "bomber.png",
+      "bytes": 44132,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/bomber.png"
+    },
+    {
+      "file": "bowler.png",
+      "bytes": 41470,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/bowler.png"
+    },
+    {
+      "file": "cannon.png",
+      "bytes": 41775,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/cannon.png"
+    },
+    {
+      "file": "dark-prince.png",
+      "bytes": 42790,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/dark-prince.png"
+    },
+    {
+      "file": "electro-spirit.png",
+      "bytes": 38813,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/electro-spirit.png"
+    },
+    {
+      "file": "electro-wizard.png",
+      "bytes": 46860,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/electro-wizard.png"
+    },
+    {
+      "file": "executioner.png",
+      "bytes": 41438,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/executioner.png"
+    },
+    {
+      "file": "fireball.png",
+      "bytes": 38913,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/fireball.png"
+    },
+    {
+      "file": "fisherman.png",
+      "bytes": 44900,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/fisherman.png"
+    },
+    {
+      "file": "flying-machine.png",
+      "bytes": 47834,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/flying-machine.png"
+    },
+    {
+      "file": "giant.png",
+      "bytes": 42880,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/giant.png"
+    },
+    {
+      "file": "goblin-barrel.png",
+      "bytes": 44228,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/goblin-barrel.png"
+    },
+    {
+      "file": "goblin-cage.png",
+      "bytes": 43004,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/goblin-cage.png"
+    },
+    {
+      "file": "goblin-gang.png",
+      "bytes": 47867,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/goblin-gang.png"
+    },
+    {
+      "file": "goblins.png",
+      "bytes": 41277,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/goblins.png"
+    },
+    {
+      "file": "golem.png",
+      "bytes": 39497,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/golem.png"
+    },
+    {
+      "file": "graveyard.png",
+      "bytes": 43326,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/graveyard.png"
+    },
+    {
+      "file": "guards.png",
+      "bytes": 41915,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/guards.png"
+    },
+    {
+      "file": "hog-rider.png",
+      "bytes": 42460,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/hog-rider.png"
+    },
+    {
+      "file": "hunter.png",
+      "bytes": 43577,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/hunter.png"
+    },
+    {
+      "file": "ice-spirit.png",
+      "bytes": 43078,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/ice-spirit.png"
+    },
+    {
+      "file": "inferno-dragon.png",
+      "bytes": 45485,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/inferno-dragon.png"
+    },
+    {
+      "file": "inferno-tower.png",
+      "bytes": 39131,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/inferno-tower.png"
+    },
+    {
+      "file": "knight.png",
+      "bytes": 46447,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/knight.png"
+    },
+    {
+      "file": "lava-hound.png",
+      "bytes": 41642,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/lava-hound.png"
+    },
+    {
+      "file": "lightning.png",
+      "bytes": 44914,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/lightning.png"
+    },
+    {
+      "file": "magic-archer.png",
+      "bytes": 44050,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/magic-archer.png"
+    },
+    {
+      "file": "mega-minion.png",
+      "bytes": 46564,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/mega-minion.png"
+    },
+    {
+      "file": "miner.png",
+      "bytes": 43800,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/miner.png"
+    },
+    {
+      "file": "mini-pekka.png",
+      "bytes": 44202,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/mini-pekka.png"
+    },
+    {
+      "file": "minion-horde.png",
+      "bytes": 45106,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/minion-horde.png"
+    },
+    {
+      "file": "minions.png",
+      "bytes": 42601,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/minions.png"
+    },
+    {
+      "file": "mortar.png",
+      "bytes": 45369,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/mortar.png"
+    },
+    {
+      "file": "musketeer.png",
+      "bytes": 43811,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/musketeer.png"
+    },
+    {
+      "file": "pekka.png",
+      "bytes": 41641,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/pekka.png"
+    },
+    {
+      "file": "poison.png",
+      "bytes": 39001,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/poison.png"
+    },
+    {
+      "file": "prince.png",
+      "bytes": 46733,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/prince.png"
+    },
+    {
+      "file": "rocket.png",
+      "bytes": 42248,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/rocket.png"
+    },
+    {
+      "file": "royal-ghost.png",
+      "bytes": 43737,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/royal-ghost.png"
+    },
+    {
+      "file": "royal-giant.png",
+      "bytes": 41905,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/royal-giant.png"
+    },
+    {
+      "file": "royal-hogs.png",
+      "bytes": 44803,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/royal-hogs.png"
+    },
+    {
+      "file": "skeleton-army.png",
+      "bytes": 44105,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/skeleton-army.png"
+    },
+    {
+      "file": "skeletons.png",
+      "bytes": 40585,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/skeletons.png"
+    },
+    {
+      "file": "tesla.png",
+      "bytes": 40639,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/tesla.png"
+    },
+    {
+      "file": "the-log.png",
+      "bytes": 46190,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/the-log.png"
+    },
+    {
+      "file": "tornado.png",
+      "bytes": 43143,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/tornado.png"
+    },
+    {
+      "file": "valkyrie.png",
+      "bytes": 45960,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/valkyrie.png"
+    },
+    {
+      "file": "witch.png",
+      "bytes": 45533,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/witch.png"
+    },
+    {
+      "file": "wizard.png",
+      "bytes": 41247,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/wizard.png"
+    },
+    {
+      "file": "x-bow.png",
+      "bytes": 41757,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/x-bow.png"
+    },
+    {
+      "file": "zap.png",
+      "bytes": 43839,
+      "source": "https://raw.githubusercontent.com/RoyaleAPI/cr-api-assets/b4530a1043b213ee2baf9c50a3d0d7fae22c2313/cards-150/zap.png"
+    }
+  ]
+}
