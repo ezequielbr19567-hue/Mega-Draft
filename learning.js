@@ -48,7 +48,7 @@ function dailyQueue(){
 }
 function renderLearning(){
  const due=dueReviews(),attempts=memory.attempts,novel=attempts.filter(x=>!x.review),review=attempts.filter(x=>x.review),percent=a=>a.length?Math.round(100*a.filter(x=>x.quality>=80&&!x.expired).length/a.length)+'%':'—';
- $('dailySummary').textContent=due.length?`${due.length} revisões prontas. A sessão mistura até 4 delas com outros contextos.`:'Recupere estratégias da memória. As revisões desta sessão voltam a partir de amanhã.';
+ $('dailySummary').textContent=due.length?`${due.length} revisões prontas para praticar.`:'Situações variadas, com revisão das suas escolhas.';
  $('dueBtn').disabled=!due.length;$('dueBtn').textContent=due.length?`Revisar ${Math.min(due.length,8)} situações de hoje`:'Revisões em dia';
  const nextDue=memory.reviews.filter(r=>r.due>Date.now()).sort((a,b)=>a.due-b.due)[0];
  $('reviewSummary').textContent=due.length?'Faça até 8 por sessão. As demais continuam na fila.':nextDue?`Próxima revisão: ${new Date(nextDue.due).toLocaleDateString('pt-BR')}. Você pode praticar outros contextos hoje.`:'Depois do primeiro treino, suas revisões aparecerão aqui.';
